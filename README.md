@@ -1,0 +1,2 @@
+# Auto-insurance-quote
+Cotizador de seguros de autos.   Toma 3 autos de distintas procedencias y distintas marcas y calcula el costo de asegurarlo.  El mas barato es el asiatico, sin embargo mientras más nuevo es el auto, mas caro es el costo de asegurarlo.  Las variables que interactuan con el proyecto son: Marca, Año y tipo de seguro.  El formulario chequea que se esté usando todos los campos, si no, no te deja cotizar un seguro.
