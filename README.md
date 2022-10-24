@@ -8,3 +8,5 @@ The cheapest is the Asian, however the newer the car, the more expensive the cos
 The variables that interact with the project are: Brand, Year and type of insurance.
 
 The form checks that all the fields are being used, if not, it does not allow you to quote an insurance.
+
+https://ivancardozo11.github.io/Auto-insurance-quote/
