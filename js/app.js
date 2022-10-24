@@ -15,7 +15,7 @@ Seguro.prototype.cotizarSeguro = function(){
     */
    let cantidad;
    const base = 2000;
-    console.log(this.marca);
+    
     switch(this.marca){
         case '1':
             cantidad =  base * 1.15;
@@ -36,7 +36,7 @@ Seguro.prototype.cotizarSeguro = function(){
     const diferencia = new Date().getFullYear() - this.year;
 // Each year that the difference is greater, the cost will be reduced by 3%
     cantidad -= ((diferencia * 3) * cantidad) / 100;
-    console.log(cantidad);
+    
 
     /*
     If the insurance is basic, it is multiplied by 30% more
@@ -46,7 +46,7 @@ Seguro.prototype.cotizarSeguro = function(){
     if(this.tipo === 'basico'){
         cantidad *= 1.30;
     }else{
-        cantida *= 1.50;
+        cantidad *= 1.50;
     }
 
     return cantidad;
@@ -87,7 +87,58 @@ UI.prototype.mostrarMensaje = (mensaje, tipo) =>{
     //Insertar en el HTML
     const formulario = document.querySelector('#cotizar-seguro');
     formulario.insertBefore(div, document.querySelector('#resultado'));
+
+    setTimeout(()=>{
+        div.remove();
+    },2000);
     
+}
+
+
+UI.prototype.mostrarResultado = (total, seguro) =>{
+
+    const { marca, year, tipo } = seguro;
+
+    let textoMarca;
+
+    switch(marca){
+        case '1':
+                textoMarca = 'Americano';
+                break;
+        case '2':
+                textoMarca = 'Asiatico';
+                break;
+        case '3':
+                textoMarca = 'Europeo';
+                break;
+
+                default:
+                    break;
+    }
+
+    //Crear el resultado
+    const div = document.createElement('div');
+    div.classList.add('mt-10');
+
+    div.innerHTML = `
+    <p class="header">Tu Resumen </p>
+    <p class="font-bold">Marca: <span class="font-normal"> $ ${textoMarca} </span></p>
+    <p class="font-bold">Año: <span class="font-normal"> $ ${year} </span></p>
+    <p class="font-bold">Año: <span class="font-normal capitalize"> $ ${tipo} </span></p>
+    <p class="font-bold">Total: <span class="font-normal"> $ ${total} </span></p>
+    
+    `;
+    const resultadoDiv = document.querySelector('#resultado');
+
+    // Mostrar spinner
+    const spinner = document.querySelector('#cargando');
+    spinner.style.display = 'block';
+
+    setTimeout(()=>{
+        spinner.style.display = 'none'; // se borra el spinner cuando se muestra el resultado.
+        resultadoDiv.appendChild(div);
+    }, 3000);
+
 }
 
 //instances UI
@@ -109,24 +160,27 @@ function cotizarSeguro(e){
     e.preventDefault();
     //read selected brand
     const marca = document.querySelector('#marca').value;
-    console.log(marca)
     //read selected year
     const year = document.querySelector('#year').value;
-    console.log(year);
     //read coverage type
     const tipo = document.querySelector('input[name="tipo"]:checked').value;
-    console.log(tipo);
 
     if(marca === '' || year === '' || tipo === ''){
         ui.mostrarMensaje('Todos los campos son obligatorios', 'error');
         return;
     }
     ui.mostrarMensaje('Cotizando...', 'exito');
-    // Coverage instance
+
+    //Ocular las cotizaciones previas
+    const resultados = document.querySelector('#resultado div');
+    if(resultados != null){
+        resultados.remove();
+    }
 
     const seguro = new Seguro(marca, year, tipo);
     seguro.cotizarSeguro();
 
-    console.log(seguro);
-    //Using the prototype that we are going to use.
+    const total = seguro.cotizarSeguro();
+
+    ui.mostrarResultado(total, seguro);
 }
